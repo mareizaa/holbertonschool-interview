@@ -4,6 +4,7 @@ Reads stdin line by line and computes metrics
 """
 from sys import stdin
 
+
 response_code = {
     "200": 0,
     "301": 0,
@@ -19,12 +20,11 @@ size = 0
 
 
 def print_response():
-    """Prints the accumulated logs"""
+    """Prints logs"""
     print("File size: {}".format(size))
     for status in sorted(response_code.keys()):
         if response_code[status]:
             print("{}: {}".format(status, response_code[status]))
-
 
 if __name__ == "__main__":
     count = 0
