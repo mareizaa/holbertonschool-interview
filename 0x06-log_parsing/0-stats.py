@@ -4,8 +4,7 @@ Reads stdin line by line and computes metrics
 """
 from sys import stdin
 
-
-response_code = {
+status_codes = {
     "200": 0,
     "301": 0,
     "400": 0,
@@ -19,12 +18,13 @@ response_code = {
 size = 0
 
 
-def print_response():
+def print_stats():
     """Prints logs"""
     print("File size: {}".format(size))
-    for status in sorted(response_code.keys()):
-        if response_code[status]:
-            print("{}: {}".format(status, response_code[status]))
+    for status in sorted(status_codes.keys()):
+        if status_codes[status]:
+            print("{}: {}".format(status, status_codes[status]))
+
 
 if __name__ == "__main__":
     count = 0
@@ -33,15 +33,15 @@ if __name__ == "__main__":
             try:
                 items = line.split()
                 size += int(items[-1])
-                if items[-2] in response_code:
-                    response_code[items[-2]] += 1
+                if items[-2] in status_codes:
+                    status_codes[items[-2]] += 1
             except:
                 pass
             if count == 9:
-                print_response()
+                print_stats()
                 count = -1
             count += 1
     except KeyboardInterrupt:
-        print_response()
+        print_stats()
         raise
-    print_response()
+    print_stats()
