@@ -1,40 +1,46 @@
 #!/usr/bin/python3
+
 """
 Reads stdin line by line and computes metrics
 """
-from sys import stdin
 
-reponse_codes = {
-    "200": 0,
-    "301": 0,
-    "400": 0,
-    "401": 0,
-    "403": 0,
-    "404": 0,
-    "405": 0,
-    "500": 0
+
+import sys
+
+
+total_file_size = {'size': 0}
+codes = {
+    '200': 0,
+    '301': 0,
+    '400': 0,
+    '401': 0,
+    '403': 0,
+    '404': 0,
+    '405': 0,
+    '500': 0
 }
 
-t_size = {'size': 0}
+
+def print_data():
+    """
+        Prints logs
+    """
+    print('File size: {}'.format(total_file_size['size']))
+    for key in sorted(codes.keys()):
+        if codes[key] > 0:
+            print('{}: {}'.format(key, codes[key]))
 
 
-def print_reponse():
-    """Prints logs"""
-    print("File size: {}".format(t_size['size']))
-    for code in sorted(reponse_codes.keys()):
-        if reponse_codes[code] > 0:
-            print("{}: {}".format(code, reponse_codes[code]))
-
-
-
-def result(item):
-    """Operates with the resume stats"""
+def operate_resume(line):
+    """
+        Operates with the resume stats
+    """
     try:
-        item = item.split(' ')
-        size = item[-1]
-        t_size["size"] += int(size)
-        if item[-2] in reponse_codes:
-            reponse_codes[item[-2]] += 1
+        line = line.split(' ')
+        size = line[-1]
+        total_file_size['size'] += int(size)
+        if line[-2] in codes:
+            codes[line[-2]] += 1
     except Exception as e:
         pass
 
@@ -42,12 +48,12 @@ def result(item):
 if __name__ == '__main__':
     num_lines = 1
     try:
-        for line in stdin:
-            result(line)
+        for line in sys.stdin:
+            operate_resume(line)
             if num_lines % 10 == 0:
-                print_reponse()
+                print_data()
             num_lines += 1
     except KeyboardInterrupt:
-        print_reponse()
+        print_data()
         raise
-    print_reponse()
+    print_data()
