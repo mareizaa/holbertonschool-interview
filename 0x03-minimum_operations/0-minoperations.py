@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 '''
-calculates the fewest number
-of operations needed to result in exactly n H characters in the file.
+Given a pile of coins of different values,
+determine the fewest number of coins
+needed to meet a given amount total
 '''
 
 
