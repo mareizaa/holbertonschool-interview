@@ -5,36 +5,21 @@
  * @str: string to scan
  * @pattern: regluar expression
  *
- * Return: if pattern matches 1, 0 if doesn't
+ * Return: 1 if pattern matches, 0 if doesn't
  */
 int regex_match(char const *str, char const *pattern)
 {
-	unsigned int i = 0, j = 0;
+	int tmp = 0;
 
-	for (i = 0, j = 0; str[i]; i++, j++)
+	if (*str == '\0' && *pattern == '\0')
+		return (1);
+	if ((*str == *pattern || *pattern == '.') && *(pattern + 1) != '*')
+		return (regex_match(str + 1, pattern + 1));
+	if (*(pattern + 1) == '*')
 	{
-		if (str[i] == pattern[j])
-			continue;
-		else if (pattern[j] == '.')
-			continue;
-		else if (pattern[j] == '*')
-		{
-			if (pattern[j - 1] == '.')
-			{
-				while (pattern[j + 1] != str[i] && str[i])
-					i++;
-			}
-			else
-			{
-				while (pattern[j - 1] == str[i])
-					i++;
-			}
-			i--;
-		}
-		else if (pattern[j + 1] && pattern[j + 1] == '*')
-			i--;
-		else
-			return (0);
+		if (*str != '\0' && (*str == *pattern || *pattern == '.'))
+			tmp = regex_match(str + 1, pattern);
+		return (regex_match(str, pattern + 2) || tmp);
 	}
-	return (1);
+	return (0);
 }
